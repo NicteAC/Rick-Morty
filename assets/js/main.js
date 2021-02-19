@@ -1,13 +1,10 @@
 import Serie from './serie.js';
 
-
-// Función IIFE
 let buscarPersonajes = (() => {
 
     const urlBase = 'https://rickandmortyapi.com/api/character/';
     const resultados = document.querySelector('#resultados');
-    let datosPersonajes;  // guardo los datos de los personajes en formato json
-
+    let datosPersonajes;  
     let obtenerPersonajes = async () => {
         try {
             let respuesta = await fetch(urlBase);
@@ -17,11 +14,11 @@ let buscarPersonajes = (() => {
             return datos;
 
         } catch (error) {
-            console.error('CUEK!!!!', error);
+            console.error(error);
         }
     }
-    
-    let detalle = async (idP) => {
+
+    let detallecharacter = async (idP) => {
         try {
             let respuesta = await fetch(`${urlBase}/${idP}`);
             let data = await respuesta.json();
@@ -31,15 +28,15 @@ let buscarPersonajes = (() => {
             //console.log(infoPersonaje)
             let detallePersonaje = document.querySelector(`#personaje-${idP}`);
             let ventanaModal = document.querySelector(`#personajeModal-${idP}`);
-            detallePersonaje.innerHTML = `${infoPersonaje.cardPersonaje()}`;
+            detallePersonaje.innerHTML = `${infoPersonaje.Personaje()}`;
             ventanaModal.innerHTML = `${infoPersonaje.modalPersonaje()}`;
         } catch (error) {
-            console.error('CUEK!!!!', error);
+            console.error(error);
         }
     }
 
     return {
-        primeraFuncionPublica: async () => {
+        FuncionPublica: async () => {
             try {
                 const personajes = await obtenerPersonajes();
                 const respuestaPersonajes = await personajes.results;
@@ -49,26 +46,26 @@ let buscarPersonajes = (() => {
                 const personaje = new Serie(id, name, species, image, status, gender, origin, location, nombre);
                 //console.log(personaje);
                 let character = [];
-                respuestaPersonajes.forEach(element => personaje.agregarPersonajes(element,character));
+                respuestaPersonajes.forEach(element => personaje.agregarPersonajes(element, character));
                 //console.log(character)
                 character.forEach(element => {
                     resultados.innerHTML += `
                     <div class="col-12 col-md-6 col-lg-3 d-inline-block detallePersona" id="personaje-${element.id}">
-                        ${detalle(element.id)}
+                        ${detallecharacter(element.id)}
                     </div>
                     <div class="modal fade" id="personajeModal-${element.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        ${detalle(element.id)}
+                        ${detallecharacter(element.id)}
                     </div>
 
                     `;
                 });
                 //console.log(personaje);
             } catch (error) {
-                console.error('CUEK!!!!', error);
+                console.error(error);
             }
         },
 
-        segundaFuncionPublica: () => {
+        FuncionPublicaDos: () => {
             let cantidadPersonajes = document.querySelector("#cantidadPersonajes");
             let spinnerBorder = document.querySelector(".spinner-border");
             spinnerBorder.remove();
@@ -77,9 +74,9 @@ let buscarPersonajes = (() => {
     }
 })();
 
-buscarPersonajes.primeraFuncionPublica();
+buscarPersonajes.FuncionPublica();
 
 setTimeout(() => {
-    buscarPersonajes.segundaFuncionPublica();
-}, 2000);
+    buscarPersonajes.FuncionPublicaDos();
+}, 600);
 
